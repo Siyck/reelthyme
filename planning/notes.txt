@@ -1,0 +1,52 @@
+___________________________________________________________________________________________
+Levi: June 7th 02:22 GMT+0
+>>>Start of Report 
+So, since we are working with a NoSQL database, and you can't really do joins and so forth, 
+lets focus on organizing the data in a hierarchical way. Such that changes that happen in
+one place can effect data upstream, but not downstream. For example, a post is added to a
+thread; we then set the date for the latest post on that thread to be the same date.
+
+So that you are aware, NoSQL databases, although are efficient at iterating through the
+document members, when something isn't by an index, you have to go through everything. Even
+with the power of map reduce and internal caching, you still have to go through each
+entry.
+
+For this reason, I think we should treat our users, and permissions as their own root
+documents, which have their members indexed. Every Document inherently gets a unique id
+in CouchDB, refer to http://wiki.apache.org/couchdb/HTTP_Document_API#Special_Fields
+
+I have learned however, that the revision data is only there for when documents require 
+conflict resolution (two shards have same base, both fork, they need to detect if merging
+is needed). For this reason I put in a data structure that keeps our own revision count and
+diffs (prefered to be in unified diff format). However I forsee it breaking in a multi-
+shard setup. Logging verbatim the old copy isn't really what I want to do, since for large
+texts this can be bothersome (Yes, we are only talking about less than 3K). Diffs only work
+when you have a dependable reference. If this reference is merged by the database.. How do
+we handle this?
+_I seek your comments on the above._
+
+Overall, I want this to be a fast structure, and I know that if we follow a standard
+Relational Database Management System it will not perform optimally. We are safe doing
+Users and Permissions in their own root documents, since they will not be growing at a
+potentially rapid rate.
+
+However Posts, threads, and so forth need to have a parental structure so we are not
+map reducing information that we know we will be skipping every time for a given thread.
+
+I was thinking about sub forums being a descendant of forums(which may be a descendant
+of another) but then I considered: That would be a lot harder to do searching through..
+Also, since forums in general are not going to be growing at a rapid rate, since only
+administrators should be able to add new forums at will. (Forums as in categories,
+like on http://ubuntuforums.org/ you have "Main Support Categories", which have subforums
+like "General Help", "Apple Users",....)
+
+Do you think we should have a separate structure that defines the forum heirarchy, and
+then we just query for the forum ids from that, rather than in the currently planned
+forum document?
+
+There's some attributes which I know are missing that are standard for normal forums,
+but I'm going to let it rest for a while due to a large assignment.
+
+The mind map is also very incomplete. It does not include the real time chat logging,
+nor room sessions, etc.
+>>>End of Report  
