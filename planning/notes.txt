@@ -1,5 +1,5 @@
 ___________________________________________________________________________________________
-Levi: June 7th 02:22 GMT+0
+Levi: June 7th 2012 02:22 GMT+0
 >>>Start of Report 
 So, since we are working with a NoSQL database, and you can't really do joins and so forth, 
 lets focus on organizing the data in a hierarchical way. Such that changes that happen in
