@@ -1,4 +1,46 @@
 ___________________________________________________________________________________________
+Levi: June 9th 2012 04:10 GMT+0
+>>>Start of Report
+After further research into CouchDB in general, it seems that we won't have to worry much
+about the costs of map reducing, since it seems to do a fair amount of indexing and caching
+and hooks to existing data so query times are significantly reduced. Yay!
+
+So, changes I made in the graph, Further research seems to pose that trying to do a
+revision system in a possibly fragmented environment is just plain dangerous and not
+dependable. So.. for simplicity, I'm going to go for verbatim copies of the text with a
+timestamp. We're talking less than 1K to 4K at most records here. Nothing significant
+unless you got someone updating a freaking record every 5 minutes for months.... Then
+there should probably be some clean ups.. But creating a maintainance function for that
+should not be hard AT ALL.
+
+Next addition, So I find out that Couch has EXCELLENT support of binary attachments.
+Things are streamed, so there's no issue of using CouchDB as a place to store our
+attachments. It can handle DVD to blueray sized rips with ease. Note: that things can get
+somewhat large however due to how stuff is packed. Compacting after large inserts are
+recommended.
+I don't think we'll need to worry much about security with attachments, since we'll be
+using the database's unique ID which is insanely long and randomlike as it is.
+
+We can probably figure out some authentication/security mechanism within nginx, so I
+really don't think we need to worry about it.
+
+I have added the Messages System, where it is directly tied to the user account. Quite
+simply, other users have no business being able to query other users' messages, also,
+when querying for a message, it won't be much of a step to find the data, since it will
+all be there and not much filtering has to happen on the dataset available like in a
+Relational DataBase Management System. (RDBMS)
+
+I have added the Chat base, it is almost too simple to bother explaining here.
+
+Finally, I have decided not to put relations directly inside of forums, but rather, have
+a separate document which describes, hierarchically, how forums are related. This may be
+reversed though, depending on how this changes how queries are capable of getting this
+information.
+
+I have Added Message support to the user document, with anticipated custom-folders for
+supporting custom-labeled mailboxes. Additionally this describes the actual message.
+>>>End of Report
+___________________________________________________________________________________________
 Levi: June 7th 2012 02:22 GMT+0
 >>>Start of Report 
 So, since we are working with a NoSQL database, and you can't really do joins and so forth, 
